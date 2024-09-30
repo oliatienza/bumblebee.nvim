@@ -92,7 +92,7 @@ local theme = lush(function(injected_functions)
 		-- Conceal        { }, -- Placeholder characters substituted for concealed text (see 'conceallevel')
 		Cursor({ fg = black, bg = primary }), -- Character under the cursor
 		-- CurSearch      { }, -- Highlighting a search pattern under the cursor (see 'hlsearch')
-		-- lCursor        { }, -- Character under the cursor when |language-mapping| is used (see 'guicursor')
+		-- lCursor({}), -- Character under the cursor when |language-mapping| is used (see 'guicursor')
 		-- CursorIM       { }, -- Like Cursor, but used when in IME mode |CursorIM|
 		-- CursorColumn   { }, -- Screen-column at the cursor, when 'cursorcolumn' is set.
 		-- CursorLine     { }, -- Screen-line at the cursor, when 'cursorline' is set. Low-priority if foreground (ctermfg OR guifg) is not set.
@@ -105,7 +105,7 @@ local theme = lush(function(injected_functions)
 		-- TermCursor({}), -- Cursor in a focused terminal
 		-- TermCursorNC   { }, -- Cursor in an unfocused terminal
 		-- ErrorMsg       { }, -- Error messages on the command line
-		-- VertSplit      { }, -- Column separating vertically split windows
+		VertSplit({ fg = primary, bg = black }), -- Column separating vertically split windows
 		-- Folded         { }, -- Line used for closed folds
 		-- FoldColumn     { }, -- 'foldcolumn'
 		-- SignColumn     { }, -- Column where |signs| are displayed
@@ -156,7 +156,7 @@ local theme = lush(function(injected_functions)
 		-- Whitespace     { }, -- "nbsp", "space", "tab" and "trail" in 'listchars'
 		-- Winseparator   { }, -- Separator between window splits. Inherts from |hl-VertSplit| by default, which it will replace eventually.
 		-- WildMenu       { }, -- Current match in 'wildmenu' completion
-		-- WinBar         { }, -- Window bar of current window
+		-- WinBar({ StatusLine }), -- Window bar of current window
 		-- WinBarNC       { }, -- Window bar of not-current windows
 
 		-- Common vim syntax groups used for all kinds of code and markup.
@@ -240,11 +240,6 @@ local theme = lush(function(injected_functions)
 		DiagnosticUnderlineInfo({ fg = info, underline = true }), -- Used to underline "Info" diagnostics.
 		DiagnosticUnderlineHint({ fg = hint, underline = true }), -- Used to underline "Hint" diagnostics.
 		DiagnosticUnderlineOk({ fg = okay, underline = true }), -- Used to underline "Ok" diagnostics.
-		-- DiagnosticUnderlineError   { } , -- Used to underline "Error" diagnostics.
-		-- DiagnosticUnderlineWarn    { } , -- Used to underline "Warn" diagnostics.
-		-- DiagnosticUnderlineInfo    { } , -- Used to underline "Info" diagnostics.
-		-- DiagnosticUnderlineHint    { } , -- Used to underline "Hint" diagnostics.
-		-- DiagnosticUnderlineOk      { } , -- Used to underline "Ok" diagnostics.
 		-- DiagnosticFloatingError    { } , -- Used to color "Error" diagnostic messages in diagnostics float. See |vim.diagnostic.open_float()|
 		-- DiagnosticFloatingWarn     { } , -- Used to color "Warn" diagnostic messages in diagnostics float.
 		-- DiagnosticFloatingInfo     { } , -- Used to color "Info" diagnostic messages in diagnostics float.
@@ -329,42 +324,49 @@ local theme = lush(function(injected_functions)
 		-- sym"@tag"               { }, -- Tag
 
 		-- dashboard.nvim
-		DashboardHeader({ fg = primary }), -- Header
+		DashboardHeader({ fg = primaryLight }),
+		DashboardFooter({ fg = lightGrey }),
+		DashboardIcon({ fg = primary }),
+		DashboardKey({ fg = accent, gui = "bold" }),
 
 		-- nvim-notify
-		NotifyBorder({ fg = blackDark, bg = blackDark }),
-		NotifyERRORBorder(NotifyBorder),
-		NotifyWARNBorder(NotifyBorder),
-		NotifyINFOBorder(NotifyBorder),
-		NotifyDEBUGBorder(NotifyBorder),
-		NotifyTRACEBorder(NotifyBorder),
-		NotifyERRORTitle({ NotifyBorder, bg = error }),
-		NotifyWARNTitle({ NotifyBorder, bg = warning }),
-		NotifyINFOTitle({ NotifyBorder, bg = info }),
-		NotifyDEBUGTitle({ NotifyBorder, bg = hint }),
-		NotifyTRACETitle({ NotifyBorder, bg = okay }),
+		NotifyERRORBorder(FloatBorder),
+		NotifyWARNBorder(FloatBorder),
+		NotifyINFOBorder(FloatBorder),
+		NotifyDEBUGBorder(FloatBorder),
+		NotifyTRACEBorder(FloatBorder),
+		NotifyERRORTitle({ FloatBorder, bg = error }),
+		NotifyWARNTitle({ FloatBorder, bg = warning }),
+		NotifyINFOTitle({ FloatBorder, bg = info }),
+		NotifyDEBUGTitle({ FloatBorder, bg = hint }),
+		NotifyTRACETitle({ FloatBorder, bg = okay }),
 		NotifyERRORIcon(NotifyERRORTitle),
 		NotifyWARNIcon(NotifyWARNTitle),
 		NotifyINFOIcon(NotifyINFOTitle),
 		NotifyDEBUGIcon(NotifyDEBUGTitle),
 		NotifyTRACEIcon(NotifyTRACETitle),
-		NotifyERRORBody({ NotifyBorder, fg = error }),
-		NotifyWARNBody({ NotifyBorder, fg = warning }),
-		NotifyINFOBody({ NotifyBorder, fg = info }),
-		NotifyDEBUGBody({ NotifyBorder, fg = hint }),
-		NotifyTRACEBody({ NotifyBorder, fg = okay }),
+		NotifyERRORBody({ FloatBorder, fg = error }),
+		NotifyWARNBody({ FloatBorder, fg = warning }),
+		NotifyINFOBody({ FloatBorder, fg = info }),
+		NotifyDEBUGBody({ FloatBorder, fg = hint }),
+		NotifyTRACEBody({ FloatBorder, fg = okay }),
 
 		-- neotree.nvim
-		NeoTreeFloatNormal({ bg = blackDark }), -- Border of floating windows.
-		NeoTreeNormalNC({ bg = blackDark }), -- Border of floating windows.
-		NeoTreeNormal({ bg = blackDark }), -- Border of floating windows.
-		NeoTreeFileName({ bg = blackDark }), -- Border of floating windows.
-		NeoTreeFloatTitle(FloatTitle), -- Border of floating windows.
+		NeoTreeFloatNormal(NormalFloat),
+		NeoTreeNormalNC(NeoTreeFloatNormal),
+		NeoTreeNormal(NeoTreeFloatNormal),
+		NeoTreeFileName(NeoTreeFloatNormal),
+		NeoTreeFloatTitle(FloatTitle),
 
 		-- telescope.nvim
-		TelescopeNormal({ bg = blackDark }), -- Border of floating windows.
-		TelescopeBorder({ fg = blackDark, bg = blackDark }), -- Border of floating windows.
-		TelescopeTitle(FloatTitle), -- Border of floating windows.
+		TelescopeNormal(NormalFloat),
+		TelescopeBorder(FloatBorder),
+		TelescopeTitle(FloatTitle),
+
+		-- lualine.nvim
+		LuaLineDiffAdd({ fg = okay, bg = black }),
+		LuaLineDiffChange({ fg = warning, bg = black }),
+		LuaLineDiffDelete({ fg = error, bg = black }),
 	}
 end)
 

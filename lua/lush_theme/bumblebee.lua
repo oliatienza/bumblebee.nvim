@@ -65,6 +65,7 @@ local lightGrey = hsl("#6d6d6d")
 local gray = hsl("#243a40")
 local black = hsl("#1b1b1b")
 local blackDark = hsl("#191919")
+local blackExtraDark = hsl("#171717")
 local white = hsl("#fff7eb")
 
 local error = hsl("#E26C6C")
@@ -124,9 +125,9 @@ local theme = lush(function(injected_functions)
 		-- MoreMsg        { }, -- |more-prompt|
 		-- NonText        { }, -- '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line). See also |hl-EndOfBuffer|.
 		Normal({ fg = white, bg = black }), -- Normal text
-		NormalFloat({ bg = blackDark }), -- Normal text in floating windows.
-		FloatBorder({ fg = blackDark, bg = blackDark }), -- Border of floating windows.
-		FloatTitle({ fg = blackDark, bg = primary, gui = "bold" }), -- Title of floating windows.
+		NormalFloat({ bg = blackExtraDark }), -- Normal text in floating windows.
+		FloatBorder({ fg = blackExtraDark, bg = blackExtraDark }), -- Border of floating windows.
+		FloatTitle({ fg = blackExtraDark, bg = primary, gui = "bold" }), -- Title of floating windows.
 		-- NormalNC       { }, -- normal text in non-current windows
 		-- Pmenu          { }, -- Popup menu: Normal item.
 		-- PmenuSel       { }, -- Popup menu: Selected item.
@@ -367,6 +368,14 @@ local theme = lush(function(injected_functions)
 		LuaLineDiffAdd({ fg = okay, bg = black }),
 		LuaLineDiffChange({ fg = warning, bg = black }),
 		LuaLineDiffDelete({ fg = error, bg = black }),
+
+		-- noice.nvim
+		NoiceCmdlinePopupBorder(FloatBorder),
+		NoiceCmdlinePopupTitle(FloatTitle),
+		NoiceCmdlinePrompt(FloatTitle),
+		NoiceCmdlinePopup(NormalFloat),
+		NoiceCmdline(NormalFloat),
+		NoiceCmdlineIcon({ fg = accent, bg = blackExtraDark }),
 	}
 end)
 
